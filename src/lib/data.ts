@@ -205,11 +205,10 @@ export const projects: {
       "Streaming SSE chat UI with charts, tables, and execution progress.",
     ],
     tech: ["Python", "FastAPI", "NextJs", "Vanna AI", "PostgreSQL", "pgvector", "OpenAI"],
-    demo: "/projects/sagent-graph.html",
     company: "Sartoro",
     role: "AI Developer",
     size: "Solo",
-    images: ["/projects/sagent-graph.png"],
+    images: ["/projects/sagent-flow.svg"],
   },
 ];
 

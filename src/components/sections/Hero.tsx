@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { profile } from "@/lib/data";
 import { Download, ArrowDown } from "lucide-react";
 import { useIsMobile } from "@/lib/useMediaQuery";
@@ -51,9 +51,19 @@ function useTypewriter(words: string[], speed = 80, pause = 1800) {
   return text;
 }
 
+const DEFAULT_ACCENT = "#00d4ff";
+
 export default function Hero({ onNext }: { onNext: () => void }) {
   const typed = useTypewriter(roles);
   const mobile = useIsMobile();
+  const [hoveredColor, setHoveredColor] = useState<string | null>(null);
+
+  const setThemeColor = useCallback((color: string | null) => {
+    const root = document.documentElement;
+    const c = color || DEFAULT_ACCENT;
+    root.style.setProperty("--accent", c);
+    setHoveredColor(color);
+  }, []);
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
@@ -66,21 +76,29 @@ export default function Hero({ onNext }: { onNext: () => void }) {
         }}
       />
 
-      {/* Floating badges */}
+      {/* Floating badges — hover to change theme color */}
       {floatingBadges.map((b, i) => (
         <motion.div
           key={b.label}
-          className="absolute rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide pointer-events-none"
+          className="absolute rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide cursor-pointer select-none"
           style={{
             left: b.x, top: b.y, color: b.color,
-            border: `1px solid ${b.color}25`,
-            background: `${b.color}08`,
+            border: `1px solid ${hoveredColor === b.color ? b.color : `${b.color}25`}`,
+            background: hoveredColor === b.color ? `${b.color}20` : `${b.color}08`,
             display: mobile ? "none" : undefined,
+            transition: "border-color 0.3s, background 0.3s, opacity 0.3s, transform 0.3s",
+            zIndex: hoveredColor === b.color ? 20 : 1,
           }}
-          animate={{ y: [0, -8, 0] }}
+          animate={{
+            y: [0, -8, 0],
+            scale: hoveredColor === b.color ? 1.2 : 1,
+            opacity: hoveredColor === b.color ? 1 : hoveredColor ? 0.2 : 0.5,
+          }}
           transition={{ duration: 3 + i * 0.4, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
           initial={{ opacity: 0, scale: 0 }}
           whileInView={{ opacity: 0.5, scale: 1 }}
+          onMouseEnter={() => setThemeColor(b.color)}
+          onMouseLeave={() => setThemeColor(null)}
         >
           {b.label}
         </motion.div>
@@ -101,10 +119,19 @@ export default function Hero({ onNext }: { onNext: () => void }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          style={{ fontSize: mobile ? 40 : undefined }}
+          style={{
+            fontSize: mobile ? 40 : undefined,
+            backgroundImage: hoveredColor
+              ? `linear-gradient(135deg, ${hoveredColor}, ${hoveredColor}88)`
+              : "linear-gradient(135deg, #00d4ff, #7c3aed)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            transition: "background-image 0.4s ease",
+          }}
           className="text-7xl md:text-8xl font-black mb-6 tracking-tight leading-none"
         >
-          <span className="gradient-text">Tam Phan Minh</span>
+          Tam Phan Minh
         </motion.h1>
 
         {/* Typewriter */}
@@ -132,7 +159,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
         >
           <button
             onClick={onNext}
-            className="px-10 py-3.5 rounded-full font-semibold text-sm tracking-wide transition-all duration-300 hover:scale-105 text-white"
+            className="px-10! py-3.5 rounded-full font-semibold text-sm tracking-wide transition-all duration-300 hover:scale-105 text-white"
             style={{
               background: "linear-gradient(135deg, #00d4ff, #7c3aed)",
               boxShadow: "0 0 20px rgba(0,212,255,0.2)",
@@ -143,7 +170,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
           <a
             href="/api/cv"
             download="TamPhanMinh_CV.pdf"
-            className="px-10 py-3.5 rounded-full font-semibold text-sm tracking-wide glass hover:scale-105 transition-all duration-300 flex items-center gap-2 text-[var(--accent)]"
+            className="px-10! py-3.5 rounded-full font-semibold text-sm tracking-wide glass hover:scale-105 transition-all duration-300 flex items-center gap-2 text-[var(--accent)]"
           >
             <Download size={16} />
             Download CV

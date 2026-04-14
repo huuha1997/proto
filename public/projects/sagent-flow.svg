@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="900" y2="520">
+      <stop offset="0%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#0f1629"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="520" fill="url(#bg)" rx="12"/>
+
+  <!-- Grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,212,255,0.04)" stroke-width="0.5"/>
+  </pattern>
+  <rect width="900" height="520" fill="url(#grid)" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="38" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#00d4ff" letter-spacing="3" text-transform="uppercase">Sartoro Agent — Request Flow</text>
+
+  <!-- ===== ROW 1: User → FastAPI → Classifier ===== -->
+
+  <!-- User Query -->
+  <rect x="30" y="70" width="160" height="72" rx="12" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <text x="110" y="98" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#00d4ff">USER QUERY</text>
+  <text x="110" y="116" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">"How many orders</text>
+  <text x="110" y="128" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">this month?"</text>
+
+  <!-- Arrow 1 -->
+  <line x1="190" y1="106" x2="240" y2="106" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="240,102 248,106 240,110" fill="#00d4ff" opacity="0.6"/>
+  <text x="219" y="98" text-anchor="middle" font-family="system-ui,sans-serif" font-size="7" fill="#64748b">SSE</text>
+
+  <!-- FastAPI Server -->
+  <rect x="250" y="70" width="160" height="72" rx="12" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <text x="330" y="98" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#34d399">FASTAPI SERVER</text>
+  <text x="330" y="116" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Python + Uvicorn</text>
+  <text x="330" y="128" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Streaming SSE</text>
+
+  <!-- Arrow 2 -->
+  <line x1="410" y1="106" x2="460" y2="106" stroke="#34d399" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="460,102 468,106 460,110" fill="#34d399" opacity="0.6"/>
+
+  <!-- Intent Classifier -->
+  <rect x="470" y="70" width="180" height="72" rx="12" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <text x="560" y="94" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#a78bfa">INTENT CLASSIFIER</text>
+  <text x="560" y="112" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">LLM Structured Output</text>
+  <text x="560" y="128" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#7c3aed">→ skill: "oma", confidence: 94%</text>
+
+  <!-- ===== ROUTING ARROWS from Classifier ===== -->
+
+  <!-- Center arrow down to OMA -->
+  <line x1="520" y1="142" x2="520" y2="185" stroke="#a78bfa" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="516,185 520,193 524,185" fill="#a78bfa" opacity="0.5"/>
+
+  <!-- Right arrow to other skills -->
+  <line x1="650" y1="106" x2="700" y2="106" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Other Skills (dimmed) -->
+  <rect x="702" y="70" width="170" height="72" rx="12" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="787" y="94" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="#475569">OTHER SKILLS</text>
+  <text x="787" y="110" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#374151">Tasks · Browser · General</text>
+  <text x="787" y="124" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#374151">ClickUp · Advanced</text>
+
+  <!-- ===== ROW 2: OMA Skill (main focus) ===== -->
+
+  <!-- OMA Skill - larger, highlighted -->
+  <rect x="30" y="195" width="250" height="90" rx="14" fill="rgba(0,212,255,0.06)" stroke="url(#accent)" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="30" y="195" width="250" height="90" rx="14" fill="rgba(0,212,255,0.03)"/>
+  <text x="155" y="222" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#00d4ff">OMA SKILL</text>
+  <text x="155" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Order &amp; Measurement Analysis</text>
+  <text x="155" y="256" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">Hardcoded pipelines + Vanna AI</text>
+  <text x="155" y="270" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">REST API integration</text>
+
+  <!-- Arrow from classifier to OMA -->
+  <line x1="470" y1="140" x2="280" y2="195" stroke="#a78bfa" stroke-width="1" opacity="0.3" stroke-dasharray="4,3"/>
+
+  <!-- Arrow OMA to Vanna -->
+  <line x1="280" y1="240" x2="340" y2="240" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="340,236 348,240 340,244" fill="#00d4ff" opacity="0.6"/>
+  <text x="310" y="232" text-anchor="middle" font-family="system-ui,sans-serif" font-size="7" fill="#64748b">NL query</text>
+
+  <!-- Vanna AI -->
+  <rect x="350" y="195" width="200" height="90" rx="14" fill="rgba(244,114,182,0.06)" stroke="rgba(244,114,182,0.3)" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="450" y="222" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#f472b6">VANNA AI</text>
+  <text x="450" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Text-to-SQL Engine</text>
+  <text x="450" y="256" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">pgvector training data</text>
+  <text x="450" y="270" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#be185d">→ SELECT count(*) FROM orders...</text>
+
+  <!-- Arrow Vanna to DB -->
+  <line x1="550" y1="240" x2="610" y2="240" stroke="#f472b6" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="610,236 618,240 610,244" fill="#f472b6" opacity="0.6"/>
+  <text x="580" y="232" text-anchor="middle" font-family="system-ui,sans-serif" font-size="7" fill="#64748b">SQL</text>
+
+  <!-- PostgreSQL -->
+  <rect x="620" y="195" width="250" height="90" rx="14" fill="rgba(251,191,36,0.06)" stroke="rgba(251,191,36,0.3)" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="745" y="218" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#fbbf24">POSTGRESQL</text>
+  <text x="745" y="236" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Production Database</text>
+  <text x="745" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">Orders · Garments · Measurements</text>
+  <text x="745" y="270" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">pgvector · JSONB fields</text>
+
+  <!-- ===== ROW 3: Response Pipeline ===== -->
+
+  <!-- Arrow DB down -->
+  <line x1="745" y1="285" x2="745" y2="330" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="741,330 745,338 749,330" fill="#fbbf24" opacity="0.5"/>
+  <text x="760" y="315" text-anchor="start" font-family="system-ui,sans-serif" font-size="7" fill="#64748b">rows</text>
+
+  <!-- Domain Knowledge (side) -->
+  <rect x="30" y="340" width="200" height="72" rx="12" fill="rgba(124,58,237,0.06)" stroke="rgba(124,58,237,0.2)" stroke-width="1" filter="url(#shadow)"/>
+  <text x="130" y="366" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#a78bfa">DOMAIN KNOWLEDGE</text>
+  <text x="130" y="382" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#94a3b8">pgvector RAG embeddings</text>
+  <text x="130" y="396" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#94a3b8">Tailoring terminology &amp; context</text>
+
+  <!-- Arrow domain to chart builder -->
+  <line x1="230" y1="376" x2="290" y2="376" stroke="#a78bfa" stroke-width="1" opacity="0.4" stroke-dasharray="4,3"/>
+  <polygon points="290,373 296,376 290,380" fill="#a78bfa" opacity="0.4"/>
+
+  <!-- Chart Builder -->
+  <rect x="300" y="340" width="210" height="72" rx="12" fill="rgba(52,211,153,0.06)" stroke="rgba(52,211,153,0.3)" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="405" y="366" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#34d399">CHART BUILDER</text>
+  <text x="405" y="382" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Deterministic renderer</text>
+  <text x="405" y="396" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">Tables · Bar · Line · Pie charts</text>
+
+  <!-- Arrow from DB to Chart Builder -->
+  <line x1="680" y1="340" x2="510" y2="340" stroke="#fbbf24" stroke-width="1" opacity="0.3" stroke-dasharray="4,3"/>
+
+  <!-- Arrow Chart Builder to Response -->
+  <line x1="510" y1="376" x2="570" y2="376" stroke="#34d399" stroke-width="1.5" opacity="0.6"/>
+  <polygon points="570,372 578,376 570,380" fill="#34d399" opacity="0.6"/>
+
+  <!-- SSE Response -->
+  <rect x="580" y="340" width="290" height="72" rx="12" fill="rgba(0,212,255,0.06)" stroke="url(#accent)" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="725" y="362" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#00d4ff">SSE STREAM RESPONSE</text>
+  <text x="725" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#94a3b8">Real-time to Next.js UI</text>
+  <text x="725" y="396" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#64748b">status → data → chart → suggestions</text>
+
+  <!-- ===== BOTTOM: Query Memory ===== -->
+
+  <rect x="300" y="440" width="300" height="52" rx="10" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="450" y="462" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="#475569">QUERY MEMORY</text>
+  <text x="450" y="478" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#374151">Learning system · Follow-up context · Conversation history</text>
+
+  <!-- Dotted lines to memory -->
+  <line x1="405" y1="412" x2="405" y2="440" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="155" y1="285" x2="350" y2="440" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+</svg>

@@ -11,6 +11,7 @@ import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import { navItems } from "@/lib/data";
 import { useIsMobile } from "@/lib/useMediaQuery";
+import BrandName from "@/components/ui/BrandName";
 
 const sections = [Hero, About, Skills, Experience, Projects, Contact];
 
@@ -131,9 +132,7 @@ export default function Page() {
         {!mobile && (
           <>
             <span style={{ width: 1, height: 12, background: "rgba(255,255,255,0.1)" }} />
-            <p className="text-white/10 text-xs tracking-[0.3em] uppercase font-bold">
-              Tam Phan
-            </p>
+            <BrandName />
           </>
         )}
       </div>
