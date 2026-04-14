@@ -14,7 +14,33 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Tam Phan Minh – Full-Stack Developer",
-  description: "Portfolio of Tam Phan Minh, Full-Stack Developer specializing in React, Next.js, NestJs, Flutter, and AI-assisted development.",
+  description:
+    "Portfolio of Tam Phan Minh, Full-Stack Developer specializing in React, Next.js, NestJs, Flutter, and AI-assisted development.",
+  metadataBase: new URL("https://tamphanminh.dev"),
+  openGraph: {
+    title: "Tam Phan Minh – Full-Stack Developer",
+    description:
+      "Portfolio of Tam Phan Minh, Full-Stack Developer specializing in React, Next.js, NestJs, Flutter, and AI-assisted development.",
+    url: "https://tamphanminh.dev",
+    siteName: "Tam Phan Minh",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Tam Phan Minh – Full-Stack Developer",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tam Phan Minh – Full-Stack Developer",
+    description:
+      "Portfolio of Tam Phan Minh, Full-Stack Developer specializing in React, Next.js, NestJs, Flutter, and AI-assisted development.",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({

@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { skills } from "@/lib/data";
 import { hexToRgba } from "@/lib/colors";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const categoryConfig: Record<string, { color: string }> = {
   Frontend: { color: "#00d4ff" },
@@ -23,6 +24,8 @@ const item = {
 const orderedCategories = ["Frontend", "Backend", "Mobile", "DevOps", "AI Tools"];
 
 export default function Skills() {
+  const mobile = useIsMobile();
+
   return (
     <div style={{
       width: "100%",
@@ -30,14 +33,14 @@ export default function Skills() {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      padding: "72px 80px 56px",
+      padding: mobile ? "48px 20px 32px" : "72px 80px 56px",
       boxSizing: "border-box",
     }}>
       <div style={{ maxWidth: 1024, width: "100%" }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 40 }}
+          style={{ marginBottom: mobile ? 24 : 40 }}
         >
           <p style={{
             color: "#00d4ff", fontSize: 11, letterSpacing: "0.25em",
@@ -45,15 +48,15 @@ export default function Skills() {
           }}>
             Tech Stack
           </p>
-          <h2 style={{ fontSize: 40, fontWeight: 900, lineHeight: 1.1 }}>
+          <h2 style={{ fontSize: mobile ? 28 : 40, fontWeight: 900, lineHeight: 1.1 }}>
             Skills & <span className="gradient-text">Tooling</span>
           </h2>
         </motion.div>
 
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "32px 64px",
+          gridTemplateColumns: mobile ? "1fr" : "1fr 1fr",
+          gap: mobile ? "20px 0" : "32px 64px",
         }}>
           {orderedCategories.map((category, catIdx) => {
             const cfg = categoryConfig[category];

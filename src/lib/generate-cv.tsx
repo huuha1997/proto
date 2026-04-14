@@ -199,6 +199,19 @@ export function CVDocument() {
             <Text style={s.contactItem}>{profile.phone}</Text>
             <Text style={s.contactItem}>{profile.location}</Text>
           </View>
+          <View style={{ marginTop: 8 }}>
+            <Link
+              src="https://tamphanminh.dev"
+              style={{
+                fontSize: 8.5,
+                color: "#a5f3fc",
+                textDecoration: "none",
+                letterSpacing: 0.3,
+              }}
+            >
+              tamphanminh.dev
+            </Link>
+          </View>
         </View>
 
         <View style={s.body}>

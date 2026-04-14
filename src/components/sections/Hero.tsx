@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { profile } from "@/lib/data";
 import { Download, ArrowDown } from "lucide-react";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const roles = [
   "Full-Stack Developer",
@@ -52,6 +53,7 @@ function useTypewriter(words: string[], speed = 80, pause = 1800) {
 
 export default function Hero({ onNext }: { onNext: () => void }) {
   const typed = useTypewriter(roles);
+  const mobile = useIsMobile();
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
@@ -73,6 +75,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
             left: b.x, top: b.y, color: b.color,
             border: `1px solid ${b.color}25`,
             background: `${b.color}08`,
+            display: mobile ? "none" : undefined,
           }}
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3 + i * 0.4, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
@@ -98,6 +101,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
+          style={{ fontSize: mobile ? 40 : undefined }}
           className="text-7xl md:text-8xl font-black mb-6 tracking-tight leading-none"
         >
           <span className="gradient-text">Tam Phan Minh</span>
@@ -109,6 +113,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
           className="text-xl md:text-2xl text-[var(--muted)] h-9 flex items-center justify-center gap-1 mb-10"
+          style={{ fontSize: mobile ? 16 : undefined }}
         >
           <span>{typed}</span>
           <span
@@ -123,6 +128,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1 }}
           className="flex flex-wrap gap-5 justify-center mb-14"
+          style={mobile ? { flexDirection: "column", alignItems: "center", gap: 12 } : undefined}
         >
           <button
             onClick={onNext}
@@ -150,6 +156,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4 }}
           className="flex gap-14 justify-center"
+          style={mobile ? { gap: 24 } : undefined}
         >
           {[
             { num: "5+", label: "Years Exp" },
@@ -157,7 +164,7 @@ export default function Hero({ onNext }: { onNext: () => void }) {
             { num: "3", label: "Countries" },
           ].map((s) => (
             <div key={s.label} className="text-center">
-              <div className="text-3xl font-black gradient-text">{s.num}</div>
+              <div className="text-3xl font-black gradient-text" style={mobile ? { fontSize: 24 } : undefined}>{s.num}</div>
               <div className="text-[10px] text-[var(--muted)] tracking-widest uppercase mt-1">{s.label}</div>
             </div>
           ))}

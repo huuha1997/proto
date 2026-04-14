@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { profile } from "@/lib/data";
 import { MapPin, Mail, Phone, Code2, Layers, Cpu, GraduationCap } from "lucide-react";
 import { hexToRgba } from "@/lib/colors";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const highlights = [
   {
@@ -36,13 +37,24 @@ const item = {
 };
 
 export default function About() {
+  const mobile = useIsMobile();
+
   return (
-    <div className="w-full h-full flex items-center justify-center px-20 py-16">
+    <div
+      className="w-full h-full flex items-center justify-center"
+      style={{ padding: mobile ? "48px 20px 32px" : "64px 80px" }}
+    >
       <motion.div
         variants={container}
         initial="hidden"
         animate="show"
-        className="max-w-5xl w-full grid md:grid-cols-2 gap-14 items-center"
+        className="max-w-5xl w-full"
+        style={{
+          display: "grid",
+          gridTemplateColumns: mobile ? "1fr" : "1fr 1fr",
+          gap: mobile ? 24 : 56,
+          alignItems: "center",
+        }}
       >
         {/* Left: Bio */}
         <div>
@@ -53,7 +65,11 @@ export default function About() {
             About Me
           </motion.p>
 
-          <motion.h2 variants={item} className="text-4xl font-black mb-5 leading-tight">
+          <motion.h2
+            variants={item}
+            className="font-black mb-5 leading-tight"
+            style={{ fontSize: mobile ? 28 : 40 }}
+          >
             Building things
             <br />
             <span className="gradient-text">that actually work.</span>

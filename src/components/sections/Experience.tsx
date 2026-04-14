@@ -4,6 +4,7 @@ import { useState } from "react";
 import { experiences } from "@/lib/data";
 import { hexToRgba } from "@/lib/colors";
 import { MapPin, Calendar, ChevronRight } from "lucide-react";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const ACCENT = "#00d4ff";
 const GREEN = "#34d399";
@@ -11,6 +12,7 @@ const GREEN = "#34d399";
 export default function Experience() {
   const [active, setActive] = useState(0);
   const exp = experiences[active];
+  const mobile = useIsMobile();
 
   return (
     <div style={{
@@ -20,14 +22,14 @@ export default function Experience() {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      padding: "72px 80px 56px",
+      padding: mobile ? "48px 20px 32px" : "72px 80px 56px",
       boxSizing: "border-box",
     }}>
       <div style={{ maxWidth: 1024, width: "100%" }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 28 }}
+          style={{ marginBottom: mobile ? 16 : 28 }}
         >
           <p style={{
             color: ACCENT, fontSize: 11, letterSpacing: "0.25em",
@@ -35,23 +37,28 @@ export default function Experience() {
           }}>
             Career
           </p>
-          <h2 style={{ fontSize: 40, fontWeight: 900, lineHeight: 1.1 }}>
+          <h2 style={{ fontSize: mobile ? 28 : 40, fontWeight: 900, lineHeight: 1.1 }}>
             Work <span className="gradient-text">Experience</span>
           </h2>
         </motion.div>
 
         <div style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 3fr",
-          gap: 24,
-          maxHeight: 420,
+          display: mobile ? "flex" : "grid",
+          flexDirection: mobile ? "column" : undefined,
+          gridTemplateColumns: mobile ? undefined : "2fr 3fr",
+          gap: mobile ? 16 : 24,
+          maxHeight: mobile ? undefined : 420,
         }}>
           {/* Company list */}
           <div style={{
-            display: "flex", flexDirection: "column", gap: 8,
-            overflowY: "auto",
+            display: "flex",
+            flexDirection: mobile ? "row" : "column",
+            gap: 8,
+            overflowX: mobile ? "auto" : undefined,
+            overflowY: mobile ? undefined : "auto",
             scrollbarWidth: "none",
             msOverflowStyle: "none",
+            flexShrink: 0,
           }}
           className="[&::-webkit-scrollbar]:hidden"
           >
@@ -59,11 +66,12 @@ export default function Experience() {
               <motion.button
                 key={i}
                 onClick={() => setActive(i)}
-                whileHover={{ x: 4 }}
+                whileHover={{ x: mobile ? 0 : 4 }}
                 style={{
-                  width: "100%",
+                  width: mobile ? "auto" : "100%",
+                  minWidth: mobile ? "fit-content" : undefined,
                   textAlign: "left",
-                  padding: 16,
+                  padding: mobile ? "10px 16px" : 16,
                   borderRadius: 12,
                   position: "relative",
                   overflow: "hidden",
@@ -73,9 +81,10 @@ export default function Experience() {
                     : "rgba(255,255,255,0.03)",
                   border: `1px solid ${active === i ? hexToRgba(ACCENT, 0.4) : "rgba(255,255,255,0.06)"}`,
                   transition: "all 0.2s",
+                  flexShrink: 0,
                 }}
               >
-                {active === i && (
+                {active === i && !mobile && (
                   <motion.div
                     layoutId="activeLine"
                     style={{
@@ -89,31 +98,36 @@ export default function Experience() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <div>
                     <p style={{
-                      fontWeight: 700, fontSize: 13,
+                      fontWeight: 700, fontSize: mobile ? 12 : 13,
                       color: active === i ? ACCENT : "rgba(255,255,255,0.8)",
+                      whiteSpace: mobile ? "nowrap" : undefined,
                     }}>
                       {e.company}
                     </p>
-                    <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>{e.role}</p>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 8 }}>
-                    {e.current && (
-                      <span style={{
-                        fontSize: 10, padding: "3px 8px", borderRadius: 99, fontWeight: 600,
-                        background: hexToRgba(GREEN, 0.15), color: GREEN,
-                      }}>
-                        Now
-                      </span>
+                    {!mobile && (
+                      <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>{e.role}</p>
                     )}
-                    <ChevronRight size={14} style={{ color: active === i ? ACCENT : "var(--muted)" }} />
                   </div>
+                  {!mobile && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 8 }}>
+                      {e.current && (
+                        <span style={{
+                          fontSize: 10, padding: "3px 8px", borderRadius: 99, fontWeight: 600,
+                          background: hexToRgba(GREEN, 0.15), color: GREEN,
+                        }}>
+                          Now
+                        </span>
+                      )}
+                      <ChevronRight size={14} style={{ color: active === i ? ACCENT : "var(--muted)" }} />
+                    </div>
+                  )}
                 </div>
               </motion.button>
             ))}
           </div>
 
           {/* Detail panel */}
-          <div>
+          <div style={{ minHeight: 0, flex: mobile ? 1 : undefined }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -126,7 +140,7 @@ export default function Experience() {
                   backdropFilter: "blur(16px)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   borderRadius: 16,
-                  padding: 32,
+                  padding: mobile ? 20 : 32,
                   height: "100%",
                   overflowY: "auto",
                   boxSizing: "border-box",
@@ -134,7 +148,7 @@ export default function Experience() {
               >
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, gap: 16 }}>
                   <div style={{ minWidth: 0 }}>
-                    <h3 style={{ fontSize: 22, fontWeight: 900, color: "#fff" }}>{exp.role}</h3>
+                    <h3 style={{ fontSize: mobile ? 18 : 22, fontWeight: 900, color: "#fff" }}>{exp.role}</h3>
                     <p style={{ color: ACCENT, fontWeight: 600, marginTop: 4, fontSize: 14 }}>{exp.company}</p>
                   </div>
                   {exp.current && (
@@ -153,7 +167,7 @@ export default function Experience() {
                   )}
                 </div>
 
-                <div style={{ display: "flex", gap: 16, marginBottom: 24, fontSize: 12, color: "var(--muted)" }}>
+                <div style={{ display: "flex", gap: 16, marginBottom: 24, fontSize: 12, color: "var(--muted)", flexWrap: "wrap" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <Calendar size={12} /> {exp.period}
                   </span>
