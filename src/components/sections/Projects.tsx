@@ -152,8 +152,9 @@ export default function Projects() {
                         transition={{ duration: 0.3 }}
                         style={{
                           width: "100%", height: "100%",
-                          objectFit: "cover",
+                          objectFit: "contain",
                           position: "absolute", inset: 0,
+                          padding: 8,
                         }}
                       />
                     </AnimatePresence>
