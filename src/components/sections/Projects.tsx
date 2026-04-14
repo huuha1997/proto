@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { projects } from "@/lib/data";
 import { hexToRgba } from "@/lib/colors";
 import { Users, Building2, User, ChevronLeft, ChevronRight, Monitor, ExternalLink } from "lucide-react";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const accents = ["#00d4ff", "#a78bfa", "#f472b6", "#fbbf24", "#34d399"];
 
@@ -15,6 +16,7 @@ export default function Projects() {
   const hasImages = p.images.length > 0;
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const iframeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const mobile = useIsMobile();
 
   // Delay iframe load by 300ms after tab switch to keep animation smooth
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function Projects() {
     <div style={{
       width: "100%", height: "100%",
       display: "flex", flexDirection: "column", alignItems: "center",
-      padding: "72px 80px 48px",
+      padding: mobile ? "48px 20px 32px" : "72px 80px 48px",
       boxSizing: "border-box",
     }}>
       <div style={{ maxWidth: 1024, width: "100%", display: "flex", flexDirection: "column", height: "100%" }}>
@@ -59,7 +61,7 @@ export default function Projects() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{ flexShrink: 0, marginBottom: 20 }}
+          style={{ flexShrink: 0, marginBottom: mobile ? 12 : 20 }}
         >
           <p style={{
             color: "#00d4ff", fontSize: 11, letterSpacing: "0.25em",
@@ -67,16 +69,19 @@ export default function Projects() {
           }}>
             Portfolio
           </p>
-          <h2 style={{ fontSize: 40, fontWeight: 900, lineHeight: 1.1 }}>
+          <h2 style={{ fontSize: mobile ? 28 : 40, fontWeight: 900, lineHeight: 1.1 }}>
             Featured <span className="gradient-text">Projects</span>
           </h2>
         </motion.div>
 
         {/* Tab bar */}
         <div style={{
-          display: "flex", gap: 4, flexShrink: 0, marginBottom: 16,
+          display: "flex", gap: 4, flexShrink: 0, marginBottom: mobile ? 12 : 16,
           overflowX: "auto", scrollbarWidth: "none",
-        }}>
+          WebkitOverflowScrolling: "touch",
+        }}
+        className="[&::-webkit-scrollbar]:hidden"
+        >
           {projects.map((proj, i) => {
             const tabAccent = accents[i % accents.length];
             const isActive = active === i;
@@ -86,9 +91,9 @@ export default function Projects() {
                 onClick={() => setActive(i)}
                 whileHover={{ y: -1 }}
                 style={{
-                  padding: "10px 20px",
+                  padding: mobile ? "8px 14px" : "10px 20px",
                   borderRadius: 10,
-                  fontSize: 12,
+                  fontSize: mobile ? 11 : 12,
                   fontWeight: isActive ? 700 : 500,
                   cursor: "pointer",
                   whiteSpace: "nowrap",
@@ -96,6 +101,7 @@ export default function Projects() {
                   background: isActive ? hexToRgba(tabAccent, 0.15) : "rgba(255,255,255,0.03)",
                   border: `1px solid ${isActive ? hexToRgba(tabAccent, 0.4) : "rgba(255,255,255,0.06)"}`,
                   color: isActive ? tabAccent : "var(--muted)",
+                  flexShrink: 0,
                 }}
               >
                 {proj.shortTitle}
@@ -114,8 +120,9 @@ export default function Projects() {
               exit={{ opacity: 0, x: -16 }}
               transition={{ duration: 0.3 }}
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                display: mobile ? "flex" : "grid",
+                flexDirection: mobile ? "column" : undefined,
+                gridTemplateColumns: mobile ? undefined : "1fr 1fr",
                 gap: 20,
                 height: "100%",
               }}
@@ -129,6 +136,7 @@ export default function Projects() {
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
+                minHeight: mobile ? 200 : undefined,
               }}>
                 {hasImages ? (
                   /* Image slideshow */
@@ -201,7 +209,7 @@ export default function Projects() {
                     )}
                   </>
                 ) : p.demo ? (
-                  /* Demo iframe — lazy loaded */
+                  /* Demo iframe -- lazy loaded */
                   <>
                     {iframeLoaded ? (
                       <iframe
@@ -249,7 +257,7 @@ export default function Projects() {
                 background: "rgba(255,255,255,0.04)",
                 backdropFilter: "blur(16px)",
                 border: "1px solid rgba(255,255,255,0.08)",
-                padding: 28,
+                padding: mobile ? 20 : 28,
                 display: "flex",
                 flexDirection: "column",
                 overflowY: "auto",
@@ -258,7 +266,7 @@ export default function Projects() {
               className="[&::-webkit-scrollbar]:hidden"
               >
                 {/* Header */}
-                <h3 style={{ fontSize: 18, fontWeight: 900, color: "#fff", marginBottom: 4 }}>
+                <h3 style={{ fontSize: mobile ? 16 : 18, fontWeight: 900, color: "#fff", marginBottom: 4 }}>
                   {p.title}
                 </h3>
                 <div style={{
@@ -327,7 +335,7 @@ export default function Projects() {
 
                 {/* Links */}
                 {(p.demo || p.appStore || p.github) && (
-                  <div style={{ display: "flex", gap: 8, flexShrink: 0, marginBottom: 12 }}>
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0, marginBottom: 12, flexWrap: "wrap" }}>
                     {p.demo && (
                       <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{
                         display: "flex", alignItems: "center", gap: 6,

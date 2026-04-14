@@ -9,7 +9,7 @@ interface Props {
 
 export default function NavDots({ current, onChange }: Props) {
   return (
-    <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4 items-center">
+    <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex-col gap-4 items-center hidden md:flex">
       {navItems.map((label, i) => (
         <button
           key={i}

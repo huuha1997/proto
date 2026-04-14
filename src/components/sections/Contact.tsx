@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { profile } from "@/lib/data";
 import { Mail, Phone, MapPin, Send, GitBranch } from "lucide-react";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const contacts = [
   { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
@@ -52,11 +53,13 @@ function ContactCard({ icon: Icon, label, value, href }: {
 }
 
 export default function Contact() {
+  const mobile = useIsMobile();
+
   return (
     <div style={{
       width: "100%", height: "100%",
       display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "72px 80px 56px",
+      padding: mobile ? "48px 20px 32px" : "72px 80px 56px",
       boxSizing: "border-box",
     }}>
       <div style={{ maxWidth: 800, width: "100%", position: "relative" }}>
@@ -70,7 +73,7 @@ export default function Contact() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{ textAlign: "center", marginBottom: 40, position: "relative", zIndex: 1 }}
+          style={{ textAlign: "center", marginBottom: mobile ? 24 : 40, position: "relative", zIndex: 1 }}
         >
           <p style={{
             color: "#00d4ff", fontSize: 11, letterSpacing: "0.25em",
@@ -78,10 +81,10 @@ export default function Contact() {
           }}>
             Get In Touch
           </p>
-          <h2 style={{ fontSize: 48, fontWeight: 900, marginBottom: 12 }}>
+          <h2 style={{ fontSize: mobile ? 32 : 48, fontWeight: 900, marginBottom: 12 }}>
             Let&apos;s <span className="gradient-text-warm">Work Together</span>
           </h2>
-          <p style={{ color: "var(--muted)", fontSize: 16, maxWidth: 400, margin: "0 auto", lineHeight: 1.6 }}>
+          <p style={{ color: "var(--muted)", fontSize: mobile ? 14 : 16, maxWidth: 400, margin: "0 auto", lineHeight: 1.6 }}>
             Open to new opportunities. Drop a message and I&apos;ll get back to you.
           </p>
         </motion.div>
@@ -89,7 +92,7 @@ export default function Contact() {
         {/* Contact cards */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: mobile ? "1fr" : "repeat(3, 1fr)",
           gap: 16,
           marginBottom: 28,
           position: "relative",

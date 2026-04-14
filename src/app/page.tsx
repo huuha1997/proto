@@ -10,6 +10,7 @@ import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import { navItems } from "@/lib/data";
+import { useIsMobile } from "@/lib/useMediaQuery";
 
 const sections = [Hero, About, Skills, Experience, Projects, Contact];
 
@@ -34,6 +35,7 @@ export default function Page() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const locked = useRef(false);
+  const mobile = useIsMobile();
 
   const navigate = useCallback(
     (next: number) => {
@@ -95,23 +97,45 @@ export default function Page() {
         key={current}
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="fixed top-8 left-8 z-50"
+        className="fixed z-50"
+        style={mobile
+          ? { top: 12, left: 16 }
+          : { top: 32, left: 32 }
+        }
       >
-        <p className="text-[var(--accent)] text-xs tracking-[0.25em] uppercase font-medium">
+        <p
+          className="text-[var(--accent)] tracking-[0.25em] uppercase font-medium"
+          style={{ fontSize: mobile ? 10 : 12 }}
+        >
           {String(current + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
         </p>
-        <p className="text-white/30 text-xs mt-0.5 tracking-wider">{navItems[current]}</p>
+        <p
+          className="text-white/30 mt-0.5 tracking-wider"
+          style={{ fontSize: mobile ? 9 : 12 }}
+        >
+          {navItems[current]}
+        </p>
       </motion.div>
 
       {/* Header right */}
-      <div className="fixed top-8 right-20 z-50 flex items-center gap-4">
-        <p style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
+      <div
+        className="fixed z-50 flex items-center gap-4"
+        style={mobile
+          ? { top: 12, right: 16 }
+          : { top: 32, right: 80 }
+        }
+      >
+        <p style={{ fontSize: mobile ? 8 : 10, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
           Crafted with <span style={{ color: "rgba(0,212,255,0.4)" }}>Claude Code</span>
         </p>
-        <span style={{ width: 1, height: 12, background: "rgba(255,255,255,0.1)" }} />
-        <p className="text-white/10 text-xs tracking-[0.3em] uppercase font-bold">
-          Tam Phan
-        </p>
+        {!mobile && (
+          <>
+            <span style={{ width: 1, height: 12, background: "rgba(255,255,255,0.1)" }} />
+            <p className="text-white/10 text-xs tracking-[0.3em] uppercase font-bold">
+              Tam Phan
+            </p>
+          </>
+        )}
       </div>
 
       {/* Animated sections */}
