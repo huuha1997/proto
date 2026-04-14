@@ -1,65 +1,146 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import ParticleField from "@/components/ui/ParticleField";
+import NavDots from "@/components/ui/NavDots";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
+import Skills from "@/components/sections/Skills";
+import Experience from "@/components/sections/Experience";
+import Projects from "@/components/sections/Projects";
+import Contact from "@/components/sections/Contact";
+import { navItems } from "@/lib/data";
 
-export default function Home() {
+const sections = [Hero, About, Skills, Experience, Projects, Contact];
+
+const variants = {
+  enter: (dir: number) => ({
+    y: dir > 0 ? "100%" : "-100%",
+    opacity: 0,
+  }),
+  center: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.7, ease: "easeOut" as const },
+  },
+  exit: (dir: number) => ({
+    y: dir > 0 ? "-100%" : "100%",
+    opacity: 0,
+    transition: { duration: 0.5, ease: "easeIn" as const },
+  }),
+};
+
+export default function Page() {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const locked = useRef(false);
+
+  const navigate = useCallback(
+    (next: number) => {
+      if (locked.current) return;
+      if (next < 0 || next >= sections.length) return;
+      locked.current = true;
+      setDirection(next > current ? 1 : -1);
+      setCurrent(next);
+      setTimeout(() => { locked.current = false; }, 900);
+    },
+    [current]
+  );
+
+  // Mouse wheel
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (e.deltaY > 30) navigate(current + 1);
+      else if (e.deltaY < -30) navigate(current - 1);
+    };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [current, navigate]);
+
+  // Keyboard
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "PageDown") navigate(current + 1);
+      if (e.key === "ArrowUp" || e.key === "PageUp") navigate(current - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [current, navigate]);
+
+  // Touch
+  const touchY = useRef(0);
+  useEffect(() => {
+    const onStart = (e: TouchEvent) => { touchY.current = e.touches[0].clientY; };
+    const onEnd = (e: TouchEvent) => {
+      const diff = touchY.current - e.changedTouches[0].clientY;
+      if (Math.abs(diff) > 50) navigate(diff > 0 ? current + 1 : current - 1);
+    };
+    window.addEventListener("touchstart", onStart);
+    window.addEventListener("touchend", onEnd);
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchend", onEnd);
+    };
+  }, [current, navigate]);
+
+  const Section = sections[current];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="relative w-screen h-screen overflow-hidden grid-bg">
+      <ParticleField />
+
+      {/* Section counter top-left */}
+      <motion.div
+        key={current}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="fixed top-8 left-8 z-50"
+      >
+        <p className="text-[var(--accent)] text-xs tracking-[0.25em] uppercase font-medium">
+          {String(current + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
+        </p>
+        <p className="text-white/30 text-xs mt-0.5 tracking-wider">{navItems[current]}</p>
+      </motion.div>
+
+      {/* Header right */}
+      <div className="fixed top-8 right-20 z-50 flex items-center gap-4">
+        <p style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
+          Crafted with <span style={{ color: "rgba(0,212,255,0.4)" }}>Claude Code</span>
+        </p>
+        <span style={{ width: 1, height: 12, background: "rgba(255,255,255,0.1)" }} />
+        <p className="text-white/10 text-xs tracking-[0.3em] uppercase font-bold">
+          Tam Phan
+        </p>
+      </div>
+
+      {/* Animated sections */}
+      <AnimatePresence custom={direction} mode="wait">
+        <motion.div
+          key={current}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute inset-0 w-full h-full"
+        >
+          <Section onNext={() => navigate(current + 1)} />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Nav dots */}
+      <NavDots current={current} onChange={(i) => navigate(i)} />
+
+      {/* Bottom progress bar */}
+      <div className="fixed bottom-0 left-0 right-0 h-0.5 bg-white/5 z-50">
+        <motion.div
+          className="h-full"
+          style={{ background: "linear-gradient(90deg, #00d4ff, #7c3aed)" }}
+          animate={{ width: `${((current + 1) / sections.length) * 100}%` }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
