@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { projects } from "@/lib/data";
 import { hexToRgba } from "@/lib/colors";
-import { Users, Building2, User, ChevronLeft, ChevronRight, Monitor, ExternalLink } from "lucide-react";
+import { Users, Building2, User, ChevronLeft, ChevronRight, Monitor, ExternalLink, Maximize2, X } from "lucide-react";
 import { useIsMobile } from "@/lib/useMediaQuery";
 
 const accents = ["#00d4ff", "#a78bfa", "#f472b6", "#fbbf24", "#34d399"];
@@ -17,6 +17,7 @@ export default function Projects() {
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const iframeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const mobile = useIsMobile();
+  const [fullscreen, setFullscreen] = useState(false);
 
   // Delay iframe load by 300ms after tab switch to keep animation smooth
   useEffect(() => {
@@ -36,8 +37,16 @@ export default function Projects() {
     return () => clearInterval(timer);
   }, [active, hasImages, p.images.length]);
 
-  // Reset slide on tab change
-  useEffect(() => { setSlideIdx(0); }, [active]);
+  // Reset slide + fullscreen on tab change
+  useEffect(() => { setSlideIdx(0); setFullscreen(false); }, [active]);
+
+  // ESC to close fullscreen
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setFullscreen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [fullscreen]);
 
   const prevSlide = useCallback(() => {
     if (!hasImages) return;
@@ -189,25 +198,27 @@ export default function Projects() {
                         <ChevronRight size={16} />
                       </button>
                     </div>
-                    {/* Open interactive link if demo exists */}
-                    {p.demo && (
-                      <a
-                        href={p.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          position: "absolute", top: 12, right: 12,
+                    {/* Top-right buttons */}
+                    <div style={{ position: "absolute", top: 12, right: 12, display: "flex", gap: 6, zIndex: 2 }}>
+                      {p.demo && (
+                        <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{
                           display: "flex", alignItems: "center", gap: 6,
                           padding: "6px 12px", borderRadius: 8,
                           background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)",
-                          color: "#fff", fontSize: 11, fontWeight: 600,
-                          textDecoration: "none", zIndex: 2,
-                        }}
-                      >
-                        <ExternalLink size={12} />
-                        {p.demo.startsWith("/") ? "Interactive" : "Open site"}
-                      </a>
-                    )}
+                          color: "#fff", fontSize: 11, fontWeight: 600, textDecoration: "none",
+                        }}>
+                          <ExternalLink size={12} />
+                          {p.demo.startsWith("/") ? "Interactive" : "Open site"}
+                        </a>
+                      )}
+                      <button onClick={() => setFullscreen(true)} style={{
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        width: 32, height: 32, borderRadius: 8, border: "none", cursor: "pointer",
+                        background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", color: "#fff",
+                      }}>
+                        <Maximize2 size={14} />
+                      </button>
+                    </div>
                   </>
                 ) : p.demo ? (
                   /* Demo iframe -- lazy loaded */
@@ -228,16 +239,23 @@ export default function Projects() {
                         Loading preview...
                       </div>
                     )}
-                    <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{
-                      position: "absolute", top: 12, right: 12,
-                      display: "flex", alignItems: "center", gap: 6,
-                      padding: "6px 12px", borderRadius: 8,
-                      background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)",
-                      color: "#fff", fontSize: 11, fontWeight: 600,
-                      textDecoration: "none", zIndex: 2,
-                    }}>
-                      <ExternalLink size={12} /> Open site
-                    </a>
+                    <div style={{ position: "absolute", top: 12, right: 12, display: "flex", gap: 6, zIndex: 2 }}>
+                      <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{
+                        display: "flex", alignItems: "center", gap: 6,
+                        padding: "6px 12px", borderRadius: 8,
+                        background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)",
+                        color: "#fff", fontSize: 11, fontWeight: 600, textDecoration: "none",
+                      }}>
+                        <ExternalLink size={12} /> Open site
+                      </a>
+                      <button onClick={() => setFullscreen(true)} style={{
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        width: 32, height: 32, borderRadius: 8, border: "none", cursor: "pointer",
+                        background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", color: "#fff",
+                      }}>
+                        <Maximize2 size={14} />
+                      </button>
+                    </div>
                   </>
                 ) : (
                   /* Placeholder */
@@ -381,6 +399,72 @@ export default function Projects() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Fullscreen overlay */}
+      <AnimatePresence>
+        {fullscreen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setFullscreen(false)}
+            style={{
+              position: "fixed", inset: 0, zIndex: 100,
+              background: "rgba(0,0,0,0.92)", backdropFilter: "blur(8px)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              padding: 40, cursor: "zoom-out",
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setFullscreen(false)}
+              style={{
+                position: "absolute", top: 20, right: 20,
+                width: 40, height: 40, borderRadius: 10, border: "none",
+                background: "rgba(255,255,255,0.1)", color: "#fff",
+                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              <X size={20} />
+            </button>
+
+            {/* Content */}
+            {hasImages ? (
+              <img
+                src={p.images[slideIdx]}
+                alt={p.title}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  maxWidth: "100%", maxHeight: "100%",
+                  objectFit: "contain", borderRadius: 12,
+                  cursor: "default",
+                }}
+              />
+            ) : p.demo ? (
+              <iframe
+                src={p.demo}
+                title={`${p.title} fullscreen`}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%", height: "100%",
+                  border: "none", borderRadius: 12,
+                  cursor: "default",
+                }}
+                sandbox="allow-scripts allow-same-origin"
+              />
+            ) : null}
+
+            {/* Title */}
+            <div style={{
+              position: "absolute", bottom: 20, left: 0, right: 0,
+              textAlign: "center", color: "rgba(255,255,255,0.5)",
+              fontSize: 12, fontWeight: 600,
+            }}>
+              {p.title} — Press ESC or click to close
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
