@@ -126,7 +126,6 @@ export const projects: {
       "React admin (30+ pages), Redis distributed locking, BullMQ jobs.",
     ],
     tech: ["NestJs", "Rust", "NextJs", "ReactJs", "GraphQL", "PostgreSQL", "MongoDB", "Redis", "gRPC", "Docker"],
-    demo: "/projects/gosporta-graph.html",
     company: "Personal",
     role: "Full-Stack Developer",
     size: "Solo",

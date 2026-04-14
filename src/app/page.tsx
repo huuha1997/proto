@@ -1,17 +1,19 @@
 "use client";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ParticleField from "@/components/ui/ParticleField";
 import NavDots from "@/components/ui/NavDots";
 import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
-import Skills from "@/components/sections/Skills";
-import Experience from "@/components/sections/Experience";
-import Projects from "@/components/sections/Projects";
-import Contact from "@/components/sections/Contact";
 import { navItems } from "@/lib/data";
 import { useIsMobile } from "@/lib/useMediaQuery";
 import BrandName from "@/components/ui/BrandName";
+
+// Lazy load sections — only Hero loads eagerly (first screen)
+const About = lazy(() => import("@/components/sections/About"));
+const Skills = lazy(() => import("@/components/sections/Skills"));
+const Experience = lazy(() => import("@/components/sections/Experience"));
+const Projects = lazy(() => import("@/components/sections/Projects"));
+const Contact = lazy(() => import("@/components/sections/Contact"));
 
 const sections = [Hero, About, Skills, Experience, Projects, Contact];
 
@@ -148,7 +150,9 @@ export default function Page() {
           exit="exit"
           className="absolute inset-0 w-full h-full"
         >
-          <Section onNext={() => navigate(current + 1)} />
+          <Suspense fallback={null}>
+            <Section onNext={() => navigate(current + 1)} />
+          </Suspense>
         </motion.div>
       </AnimatePresence>
 
