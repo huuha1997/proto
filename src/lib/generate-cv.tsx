@@ -201,7 +201,7 @@ export function CVDocument() {
           </View>
           <View style={{ marginTop: 8 }}>
             <Link
-              src="https://tamphanminh.dev"
+              src="https://tamphan.vercel.app"
               style={{
                 fontSize: 8.5,
                 color: "#a5f3fc",
@@ -209,7 +209,7 @@ export function CVDocument() {
                 letterSpacing: 0.3,
               }}
             >
-              tamphanminh.dev
+              tamphan.vercel.app
             </Link>
           </View>
         </View>

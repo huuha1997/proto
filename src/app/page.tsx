@@ -96,10 +96,7 @@ export default function Page() {
       <ParticleField />
 
       {/* Section counter top-left */}
-      <motion.div
-        key={current}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
+      <div
         className="fixed z-50"
         style={mobile
           ? { top: 12, left: 16 }
@@ -110,15 +107,38 @@ export default function Page() {
           className="text-[var(--accent)] tracking-[0.25em] uppercase font-medium"
           style={{ fontSize: mobile ? 10 : 12 }}
         >
-          {String(current + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={current}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              style={{ display: "inline-block" }}
+            >
+              {String(current + 1).padStart(2, "0")}
+            </motion.span>
+          </AnimatePresence>
+          {" / "}{String(sections.length).padStart(2, "0")}
         </p>
         <p
           className="text-white/30 mt-0.5 tracking-wider"
           style={{ fontSize: mobile ? 9 : 12 }}
         >
-          {navItems[current]}
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={current}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              style={{ display: "inline-block" }}
+            >
+              {navItems[current]}
+            </motion.span>
+          </AnimatePresence>
         </p>
-      </motion.div>
+      </div>
 
       {/* Header right */}
       <div

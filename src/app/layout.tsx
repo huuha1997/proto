@@ -16,12 +16,12 @@ export const metadata: Metadata = {
   title: "Tam Phan Minh – Full-Stack Developer",
   description:
     "Portfolio of Tam Phan Minh, Full-Stack Developer specializing in React, Next.js, NestJs, Flutter, and AI-assisted development.",
-  metadataBase: new URL("https://tamphanminh.dev"),
+  metadataBase: new URL("https://tamphan.vercel.app"),
   openGraph: {
     title: "Tam Phan Minh – Full-Stack Developer",
     description:
       "Portfolio of Tam Phan Minh, Full-Stack Developer specializing in React, Next.js, NestJs, Flutter, and AI-assisted development.",
-    url: "https://tamphanminh.dev",
+    url: "https://tamphan.vercel.app",
     siteName: "Tam Phan Minh",
     images: [
       {

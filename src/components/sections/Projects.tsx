@@ -120,7 +120,7 @@ export default function Projects() {
         </div>
 
         {/* Content area */}
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, minHeight: 0, maxHeight: mobile ? undefined : "calc(100vh - 280px)" }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -134,6 +134,7 @@ export default function Projects() {
                 gridTemplateColumns: mobile ? undefined : "1fr 1fr",
                 gap: 20,
                 height: "100%",
+                maxHeight: mobile ? undefined : "calc(100vh - 280px)",
               }}
             >
               {/* Left: Live demo / slideshow / placeholder */}
